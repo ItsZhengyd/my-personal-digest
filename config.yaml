@@ -1,5 +1,0 @@
-markdown_dir_path: pre-docs
-markdown_db_path: matcha.db
-feeds:
-  - http://hnrss.org/best
-  - https://feeds.bbci.co.uk/news/rss.xml

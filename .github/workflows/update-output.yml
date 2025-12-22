@@ -43,7 +43,7 @@ jobs:
           if [ -f matcha.db.enc ]; then
             openssl enc -aes-256-cbc -pbkdf2 \
               -d -in matcha.db.enc \
-              -out .matcha.db \
+              -out matcha.db \
               -pass pass:"${{ secrets.MATCHA_DB_KEY }}" || exit 1
           fi
 
@@ -63,10 +63,10 @@ jobs:
         run: |
           openssl enc -aes-256-cbc -pbkdf2 \
             -salt \
-            -in .matcha.db \
+            -in matcha.db \
             -out matcha.db.enc \
             -pass pass:"${{ secrets.MATCHA_DB_KEY }}" || exit 1
-          rm -f .matcha.db
+          rm -f matcha.db
 
       - name: Process Site (Encrypt or Copy)
         shell: bash

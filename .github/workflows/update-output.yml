@@ -52,6 +52,13 @@ jobs:
           matcha -c config.yaml
           matcha -c config.yaml --generate-all
 
+      - name: Build HTML content
+        run: |
+          go run build_content.go
+
+      - name: Remove plaintext markdown
+        run: rm -f pre-docs/*.md
+
       - name: Encrypt database
         run: |
           openssl enc -aes-256-cbc -pbkdf2 \
@@ -60,13 +67,6 @@ jobs:
             -out matcha.db.enc \
             -pass pass:"${{ secrets.MATCHA_DB_KEY }}" || exit 1
           rm -f matcha.db
-
-      - name: Build HTML content
-        run: |
-          go run build_content.go
-
-      - name: Remove plaintext markdown
-        run: rm -f pre-docs/*.md
 
       - name: Process Site (Encrypt or Copy)
         shell: bash

@@ -51,6 +51,9 @@ jobs:
         run: |
           matcha -c config.yaml
           matcha -c config.yaml --generate-all
+          echo "=== Debug: checking files after matcha ==="
+          ls -la *.db 2>/dev/null || echo "No .db files found"
+          ls -la pre-docs/ 2>/dev/null || echo "pre-docs not found"
 
       - name: Build HTML content
         run: |
@@ -89,5 +92,13 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "🤖 Update RSS feeds and DB state"
-          file_pattern: 'matcha.db.enc docs/*'
+          file_pattern: 'docs/*'
           branch: main
+
+      - name: Commit encrypted database (if exists)
+        run: |
+          if [ -f matcha.db.enc ]; then
+            git add matcha.db.enc
+            git diff --cached --quiet || git commit -m "🔐 Update encrypted database"
+            git push
+          fi
